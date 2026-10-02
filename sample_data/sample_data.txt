@@ -1,0 +1,12 @@
+Software Engineer
+
+Requirements:
+
+Bachelor's degree in Computer Science
+or a related field.
+
+2+ years of experience in Python development.
+
+Experience with SQL and REST APIs.
+
+AWS experience is preferred.
