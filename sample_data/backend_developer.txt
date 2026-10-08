@@ -1,0 +1,8 @@
+Backend Developer
+
+Requirements:
+
+Bachelor's degree in Computer Science or a related field.
+At least 3 years of professional experience in backend development.
+Strong experience with Python, Docker, and Git.
+AWS experience is preferred.
