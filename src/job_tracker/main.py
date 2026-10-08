@@ -7,11 +7,13 @@ if __package__:
     from .database import list_jobs, save_job, update_job_status
     from .extractor import extract_requirements
     from .matcher import match_job
+    from .jobsdb_collector import collect_jobs as collect_jobs_from_url
 else:
     from csv_importer import read_jobs_from_csv
     from database import list_jobs, save_job, update_job_status
     from extractor import extract_requirements
     from matcher import match_job
+    from jobsdb_collector import collect_jobs as collect_jobs_from_url
 
 
 def main() -> None:
@@ -40,6 +42,16 @@ def main() -> None:
         "--import-csv",
         type=Path,
         help="Import multiple job listings from a CSV file.",
+    )
+    parser.add_argument(
+        "--jobsdb-url",
+        help="Collect JobsDB jobs from a filtered search URL.",
+    )
+    parser.add_argument(
+        "--jobsdb-max-jobs",
+        type=int,
+        default=20,
+        help="Maximum JobsDB detail pages to process.",
     )
     parser.add_argument(
         "--match-profile",
@@ -135,6 +147,27 @@ def main() -> None:
                 title=job["title"],
                 company=job["company"],
                 source_file=str(args.import_csv),
+                description=job["description"],
+                requirements=requirements,
+                source_url=job["url"],
+                location=job["location"],
+                salary_min_hkd=job["salary_min_hkd"],
+                salary_max_hkd=job["salary_max_hkd"],
+            )
+            imported_jobs.append({"database_id": job_id, **job, **requirements})
+
+        print(json.dumps(imported_jobs, indent=2, ensure_ascii=False))
+        return
+
+    if args.jobsdb_url:
+        imported_jobs = []
+        for job in collect_jobs_from_url(args.jobsdb_url, args.jobsdb_max_jobs):
+            requirements = extract_requirements(job["description"])
+            job_id = save_job(
+                args.database,
+                title=job["title"],
+                company=job["company"],
+                source_file="jobsdb:search-url",
                 description=job["description"],
                 requirements=requirements,
                 source_url=job["url"],

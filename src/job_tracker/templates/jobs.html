@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Automated Job Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="page-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">PERSONAL JOB TRACKER</p>
+                <h1>Recommended jobs</h1>
+                <p class="subtitle">Ranked against your current profile.</p>
+            </div>
+            <div class="summary">{{ jobs|length }} saved jobs</div>
+        </header>
+
+        {% if jobs %}
+        <section class="job-list" aria-label="Saved jobs">
+            {% for job in jobs %}
+            <article class="job-row">
+                <div class="job-main">
+                    <div class="job-title-line">
+                        <h2>{{ job.title }}</h2>
+                        <span class="score">{{ job.match_score }}%</span>
+                    </div>
+                    <p class="company">{{ job.company or "Company not specified" }}</p>
+                    <div class="metadata">
+                        <span>{{ job.location or "Location not specified" }}</span>
+                        {% if job.salary_min_hkd and job.salary_max_hkd %}
+                        <span>HKD {{ "{:,}".format(job.salary_min_hkd) }}–{{ "{:,}".format(job.salary_max_hkd) }}</span>
+                        {% endif %}
+                        <span>{{ job.status }}</span>
+                    </div>
+                    <div class="details">
+                        <div><strong>Matched:</strong> {{ job.matched_required_skills|join(", ") or "None" }}</div>
+                        <div><strong>Missing:</strong> {{ job.missing_required_skills|join(", ") or "None" }}</div>
+                        {% if job.warnings %}
+                        <div class="warning">{{ job.warnings|join(" · ") }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <form class="status-form" method="post" action="{{ url_for('update_status', job_id=job.id) }}">
+                    <label for="status-{{ job.id }}">Status</label>
+                    <select id="status-{{ job.id }}" name="status" onchange="this.form.submit()">
+                        {% for status in ["discovered", "interested", "applied", "interview", "rejected", "archived"] %}
+                        <option value="{{ status }}" {% if job.status == status %}selected{% endif %}>{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </article>
+            {% endfor %}
+        </section>
+        {% else %}
+        <section class="empty-state">
+            <h2>No saved jobs yet</h2>
+            <p>Import a CSV file, then refresh this page.</p>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

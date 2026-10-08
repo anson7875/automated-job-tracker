@@ -21,7 +21,11 @@ py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-The project uses only Python's standard library, so no extra packages are required.
+Install the Web UI dependency:
+
+```powershell
+py -m pip install -r requirements.txt
+```
 
 ## CSV Format
 
@@ -62,6 +66,16 @@ py src\job_tracker\main.py --recommend sample_data\user_profile.json --minimum-s
 ```powershell
 py src\job_tracker\main.py --status 1 applied
 ```
+
+## Run the Web UI
+
+```powershell
+$env:PYTHONPATH = "src"
+py -m job_tracker.web
+```
+
+Open `http://127.0.0.1:5000` in your browser. The dashboard reads saved jobs,
+sorts them by match score, and lets you update each job's status.
 
 ## Run Tests
 
