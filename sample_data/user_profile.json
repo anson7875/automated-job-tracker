@@ -1,0 +1,18 @@
+{
+  "education": "Bachelor's degree",
+  "experience_years": 0,
+  "salary_min_hkd": 15000,
+  "salary_max_hkd": 24000,
+  "preferred_locations": ["Hong Kong", "Remote"],
+  "skills": [
+    "MS Office",
+    "Java",
+    "Python",
+    "ERP",
+    "WordPress",
+    "MySQL",
+    "Cantonese",
+    "English",
+    "Putonghua"
+  ]
+}

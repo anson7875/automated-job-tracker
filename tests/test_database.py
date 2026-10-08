@@ -30,6 +30,7 @@ class DatabaseTests(unittest.TestCase):
                 source_file="sample_data.txt",
                 description="Sample description",
                 requirements=requirements,
+                source_url="https://example.com/jobs/1",
             )
 
             self.assertEqual(job_id, 1)
@@ -52,9 +53,34 @@ class DatabaseTests(unittest.TestCase):
 
         self.assertEqual(saved_jobs[0]["id"], 1)
         self.assertEqual(saved_jobs[0]["title"], "Software Engineer")
+        self.assertEqual(saved_jobs[0]["source_url"], "https://example.com/jobs/1")
         self.assertEqual(saved_jobs[0]["required_skills"], ["Python", "SQL"])
         self.assertEqual(saved_jobs[0]["preferred_skills"], ["AWS"])
         self.assertEqual(updated_jobs[0]["status"], "applied")
+
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            database_path = Path(temporary_directory) / "jobs.db"
+            first_id = save_job(
+                database_path,
+                title="Software Engineer",
+                company="Example Company",
+                source_file="first.txt",
+                description="First description",
+                requirements=requirements,
+                source_url="https://example.com/jobs/duplicate",
+            )
+            second_id = save_job(
+                database_path,
+                title="Updated title",
+                company="Another Company",
+                source_file="second.txt",
+                description="Second description",
+                requirements=requirements,
+                source_url="https://example.com/jobs/duplicate",
+            )
+
+            self.assertEqual(second_id, first_id)
+            self.assertEqual(len(list_jobs(database_path)), 1)
 
 
 if __name__ == "__main__":

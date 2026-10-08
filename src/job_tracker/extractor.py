@@ -19,12 +19,20 @@ EXPERIENCE_PATTERN = re.compile(
 
 SKILL_PATTERNS = (
     ("Python", r"\bpython\b"),
+    ("Java", r"\bjava\b"),
     ("SQL", r"\bsql\b"),
+    ("MySQL", r"\bmysql\b"),
     ("REST APIs", r"\brest\s+apis?\b"),
     ("AWS", r"\baws\b|amazon web services"),
     ("Docker", r"\bdocker\b"),
     ("PostgreSQL", r"\bpostgres(?:ql)?\b"),
     ("Git", r"\bgit\b"),
+    ("MS Office", r"\bms\s+office\b|microsoft office"),
+    ("WordPress", r"\bwordpress\b"),
+    ("ERP", r"\berp\b|enterprise resource planning"),
+    ("Cantonese", r"\bcantonese\b"),
+    ("English", r"\benglish\b"),
+    ("Putonghua", r"\bputonghua\b|mandarin"),
 )
 
 PREFERRED_MARKERS = ("preferred", "nice to have", "bonus", "advantage")
